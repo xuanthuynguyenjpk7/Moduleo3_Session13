@@ -15,7 +15,6 @@ public class ConnectionDB {
                     "123456");
         } catch (SQLException e) {
             System.out.println("Kết nối thất bại!");
-            e.printStackTrace();
         }
     }
 
