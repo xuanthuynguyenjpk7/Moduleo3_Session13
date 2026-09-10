@@ -40,7 +40,7 @@ public class Main {
                     deleteStudent(sc);
                     break;
                 case 5:
-                    System.out.println("Chức năng chưa thực hiện");
+                    searchStudent(sc);
                     break;
                 case 6:
                     System.out.println("Đã thoát chương trình");
@@ -304,6 +304,41 @@ public class Main {
             stmt.setInt(1, studentId);
             stmt.executeUpdate();
             System.out.println("Đã xóa sinh viên có mã ID " + studentId + " thành công!");
+        } catch (SQLException e) {
+            System.out.println("Lỗi SQL: " + e.getMessage());
+        }
+    }
+
+    private static void searchStudent(Scanner sc) {
+        if (ConnectionDB.conn == null) {
+            System.out.println("Lỗi: Chưa kết nối được với database!");
+            return;
+        }
+        //nhập tên sv cần tìm
+        sc.nextLine();
+
+        System.out.println("Nhập tên sinh viên cần tìm: ");
+        String studentName = sc.nextLine().trim();
+
+        String sqlSearch = "{CALL search_student(?)}";
+        try (CallableStatement stmt = ConnectionDB.conn.prepareCall(sqlSearch)) {
+            stmt.setString(1, studentName);
+            try (ResultSet rs = stmt.executeQuery()) {
+                boolean found = false;
+                while (rs.next()) {
+                    found = true;
+                    int studentId = rs.getInt("student_id");
+                    String fullName = rs.getString("full_name");
+                    Date dateOfBirth = Date.valueOf(rs.getDate("date_of_birth").toLocalDate());
+                    String email = rs.getString("email");
+                    System.out.println(studentId + " " + fullName + " " + dateOfBirth + " " + email);
+                }
+                if (!found) {
+                    System.out.println("Không tìm thấy sinh viên!");
+                }
+            } catch (SQLException e) {
+                System.out.println("Lỗi SQL: " + e.getMessage());
+            }
         } catch (SQLException e) {
             System.out.println("Lỗi SQL: " + e.getMessage());
         }
