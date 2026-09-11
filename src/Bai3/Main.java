@@ -276,6 +276,7 @@ public class Main {
             }
 
         }
+
         //Tìm xem ID có tồn tại hay không
         Student student = new Student();
         String sqlFind = "{CALL find_student_by_student_id(?)}";
@@ -296,6 +297,15 @@ public class Main {
 
         } catch (SQLException e) {
             System.out.println("Lỗi SQL: " + e.getMessage());
+        }
+
+        //Xác nhận trước khi xóa
+
+        System.out.println("Bạn có chắc chắn muốn xóa sinh viên có mã số ID là " + studentId + " không?");
+        String confirm = sc.nextLine();
+        if (!confirm.equalsIgnoreCase("Yes")) {
+            System.out.println("Đã hủy thao tác xóa!");
+            return;
         }
 
         //xóa sinh viên

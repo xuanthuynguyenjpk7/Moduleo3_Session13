@@ -8,4 +8,7 @@ public class StudentManagement {
     public static void main(String[] args) {
 
     }
+
+    public static void deleteStudent(int studentId) {
+    }
 }
